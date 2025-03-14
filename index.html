@@ -189,9 +189,9 @@
                 this.y = Math.random() * canvas.height;
                 this.targetX = target.x;
                 this.targetY = target.y;
-                this.size = Math.random() * 4 + 2;
+                this.size = Math.random() * 2 + 1; // Ukuran lebih kecil
                 this.speed = Math.random() * 0.05 + 0.02;
-                this.explodeSpeed = Math.random() * 5 + 2;
+                this.explodeSpeed = Math.random() * 3 + 1; // Kecepatan eksplosif
                 this.angle = Math.random() * Math.PI * 2;
                 this.angleVariation = (Math.random() - 0.5) * Math.PI * 0.5; // Variasi arah gerakan
                 this.distanceFromCenter = Math.random() * 100 + 100; // Jarak acak untuk menyebar
@@ -224,13 +224,13 @@
         }
 
         function createParticles() {
-            particles = Array.from({ length: 1500 }, () => new Particle()); // Jumlah partikel menjadi 1500
+            particles = Array.from({ length: 1000 }, () => new Particle()); // Jumlah partikel menjadi 1000
         }
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
+            requestAnimationFrame(animateParticles); // Menjaga 60 FPS
         }
 
         function toggleState() {
