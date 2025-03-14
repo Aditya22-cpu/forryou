@@ -187,9 +187,10 @@
             }
 
             reset() {
+                // Memulai partikel di luar layar dan mengarah ke posisi love
                 let target = heartPath[Math.floor(Math.random() * heartPath.length)];
-                this.x = Math.random() * canvas.width; // Partikel mulai dari posisi acak
-                this.y = Math.random() * canvas.height;
+                this.x = Math.random() * canvas.width * 2 - canvas.width; // Mulai dari luar layar (kiri/kanan)
+                this.y = Math.random() * canvas.height * 2 - canvas.height; // Mulai dari luar layar (atas/bawah)
                 this.targetX = target.x;
                 this.targetY = target.y;
                 this.size = Math.random() * 5 + 3; // Ukuran sedikit lebih besar
