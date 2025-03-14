@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eternal Love</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d0d0d, #330033);
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: white;
+            position: relative;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .animated-text {
+            font-size: 4em;
+            color: white;
+            text-shadow: 0 0 30px #ff99cc, 0 0 50px #ff66b2;
+            display: none;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: none;
+        }
+
+        .start-button {
+            padding: 15px 40px;
+            font-size: 2em;
+            font-weight: bold;
+            border: 2px solid white;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            border-radius: 50px;
+            box-shadow: 0 0 10px white;
+            transition: 0.3s;
+            outline: none;
+            animation: pulse 1.5s infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .start-button:hover {
+            background: white;
+            color: black;
+            box-shadow: 0 0 20px white;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .welcome-text {
+            font-size: 2em;
+            color: white;
+            text-shadow: 0 0 10px #ff99cc;
+            margin-top: 20px;
+            display: none;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <audio id="backgroundMusic" loop>
+        <source src="Arctic_Monkeys_-_I_Wanna_Be_Yours.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <button class="start-button" id="startButton">Klik di Sini</button>
+    <div class="welcome-text" id="welcomeText"></div>
+    <div class="animated-text">You're very beautiful</div>
+    <canvas id="particleCanvas"></canvas>
+
+    <script>
+        const button = document.getElementById("startButton");
+        button.addEventListener("mouseover", moveButton);
+        button.addEventListener("click", startAnimation);
+
+        function moveButton() {
+            const x = Math.random() * (window.innerWidth - 200);
+            const y = Math.random() * (window.innerHeight - 100);
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+        }
+
+        function startAnimation() {
+            button.style.display = "none";
+            const music = document.getElementById("backgroundMusic");
+            music.play().catch(error => {
+                console.error("Error playing music:", error);
+            });
+
+            const welcomeText = document.getElementById("welcomeText");
+            welcomeText.style.display = "block";
+            welcomeText.innerHTML = "Selamat datang wahai nona manis yang memiliki senyum manis.";
+
+            setTimeout(() => {
+                welcomeText.innerHTML = "Bersiaplah menyaksikan sesuatu yang sudah diciptakan oleh adit gabut haha...";
+            }, 2000);
+
+            setTimeout(() => {
+                welcomeText.style.display = "none";
+                document.querySelector(".animated-text").style.display = "block";
+            }, 5000);
+
+            setTimeout(() => {
+                document.getElementById("particleCanvas").style.display = "block";
+                initParticles();
+            }, 7000);
+        }
+
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        let state = "forming";
+
+        function generateHeartPath() {
+            let path = [];
+            for (let t = 0; t < Math.PI * 2; t += 0.05) {
+                let x = 16 * Math.pow(Math.sin(t), 3);
+                let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+                path.push({ x: x * 15 + canvas.width / 2, y: -y * 15 + canvas.height / 2 });
+            }
+            return path;
+        }
+
+        let heartPath = generateHeartPath();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                let target = heartPath[Math.floor(Math.random() * heartPath.length)];
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.targetX = target.x;
+                this.targetY = target.y;
+                this.size = Math.random() * 4 + 2;
+                this.speed = Math.random() * 0.05 + 0.02;
+                this.explodeSpeed = Math.random() * 5 + 2;
+                this.angle = Math.random() * Math.PI * 2;
+                this.color = "#ff66b2";
+            }
+
+            update() {
+                if (state === "forming") {
+                    this.x += (this.targetX - this.x) * this.speed;
+                    this.y += (this.targetY - this.y) * this.speed;
+                } else {
+                    this.x += Math.cos(this.angle) * this.explodeSpeed;
+                    this.y += Math.sin(this.angle) * this.explodeSpeed;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = Array.from({ length: 1500 }, () => new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+
+        function toggleState() {
+            state = state === "forming" ? "exploding" : "forming";
+            setTimeout(toggleState, 3500);
+        }
+
+        function initParticles() {
+            createParticles();
+            animateParticles();
+            setTimeout(toggleState, 3500);
+        }
+    </script>
+</body>
+</html>
