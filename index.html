@@ -49,16 +49,34 @@
                         200px 350px #FFF, 300px 200px #FFF, 450px 300px #FFF,
                         550px 150px #FFF, 600px 250px #FFF, 700px 100px #FFF,
                         800px 350px #FFF, 900px 200px #FFF, 1000px 300px #FFF;
-            animation: animStar 100s linear infinite;
+            animation: animStar 100s linear infinite, twinkle 2s infinite alternate;
             position: absolute;
             top: 0;
             left: 0;
             z-index: -1;
         }
 
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #ff66b2;
+            font-size: 24px;
+            animation: floatHeart 6s ease-in-out infinite;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 0.7; }
+            100% { transform: translateY(0) rotate(360deg); opacity: 1; }
+        }
+
         .heart-photo {
             position: absolute;
-            top: 50%;
+            top: 35%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 150px;
@@ -69,6 +87,18 @@
             box-shadow: 0 0 20px #ff66b2;
             z-index: 1;
             display: none;
+            animation: float 4s ease-in-out infinite, rotate 8s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateY(-20px); }
+            100% { transform: translate(-50%, -50%) translateY(0); }
+        }
+
+        @keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         @media screen and (max-width: 768px) {
@@ -174,6 +204,11 @@
 <body>
     <div id="stars"></div>
     <div id="stars2"></div>
+    <div class="floating-heart" style="left: 10%; top: 20%;">❤️</div>
+    <div class="floating-heart" style="left: 30%; top: 50%;">❤️</div>
+    <div class="floating-heart" style="left: 70%; top: 30%;">❤️</div>
+    <div class="floating-heart" style="left: 90%; top: 60%;">❤️</div>
+    <div class="floating-heart" style="left: 100%; top: 60%;">❤️</div>
     <audio id="backgroundMusic" loop>
         <source src="Arctic_Monkeys_-_I_Wanna_Be_Yours.mp3" type="audio/mp3">
         Your browser does not support the audio element.
@@ -197,6 +232,9 @@
             button.style.top = `${y}px`;
         }
 
+        button.addEventListener('mouseover', moveButton);
+        button.addEventListener('touchstart', moveButton);
+
         function startAnimation() {
             button.style.display = "none";
             const music = document.getElementById("backgroundMusic");
@@ -204,10 +242,10 @@
 
             const welcomeText = document.getElementById("welcomeText");
             welcomeText.style.display = "block";
-            welcomeText.innerHTML = "wkwkwk kena prank tombol yaa.";
+            welcomeText.innerHTML = "wkwk diprank tombol yaa.";
 
             setTimeout(() => {
-                welcomeText.innerHTML = "Semangat cantik besok pauasa yaa^.^...";
+                welcomeText.innerHTML = "puasa kau besok bagi pahalanya:v...";
             }, 2000);
 
             setTimeout(() => {
