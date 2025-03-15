@@ -7,8 +7,6 @@
     <style>
         body {
             background: linear-gradient(135deg, #0d0d0d, #330033);
-            animation: backgroundAnimation 10s infinite alternate;
-
             text-align: center;
             font-family: 'Arial', sans-serif;
             overflow: hidden;
@@ -29,19 +27,7 @@
             text-shadow: 0 0 30px #ff99cc, 0 0 50px #ff66b2;
             display: none;
             opacity: 0;
-            animation: fadeIn 2s forwards, textAnimation 1.5s infinite alternate, glowAnimation 1.5s infinite alternate;
-        }
-
-        @keyframes textAnimation {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            50% { transform: translateY(-10px) scale(1.1); opacity: 0.8; color: #ff99cc; }
-            100% { transform: translateY(-20px) scale(0.9); opacity: 0.5; color: #ff66b2; }
-        }
-
-        @keyframes glowAnimation {
-            0% { text-shadow: 0 0 10px #ff99cc; }
-            50% { text-shadow: 0 0 20px #ff66b2; }
-            100% { text-shadow: 0 0 10px #ff99cc; }
+            animation: fadeIn 2s forwards;
         }
 
         canvas {
@@ -110,7 +96,6 @@
     <button class="start-button" id="startButton">Klik di Sini</button>
     <div class="welcome-text" id="welcomeText"></div>
     <div class="animated-text">You're very beautiful</div>
-
     <canvas id="particleCanvas"></canvas>
 
     <script>
