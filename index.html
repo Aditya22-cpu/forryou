@@ -199,6 +199,45 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* Confetti Animation */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff66b2;
+            opacity: 0;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Glowing Pulse */
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px #ff66b2; }
+            50% { box-shadow: 0 0 40px #ff66b2; }
+            100% { box-shadow: 0 0 20px #ff66b2; }
+        }
+
+        .heart-photo {
+            animation: float 4s ease-in-out infinite, 
+                       rotate 8s linear infinite,
+                       glow 3s ease-in-out infinite;
+        }
+
+        /* Background Color Transition */
+        body {
+            animation: bgTransition 20s infinite alternate;
+        }
+
+        @keyframes bgTransition {
+            0% { background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); }
+            50% { background: radial-gradient(ellipse at bottom, #2B3745 0%, #191A1F 100%); }
+            100% { background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); }
+        }
     </style>
 </head>
 <body>
@@ -208,7 +247,16 @@
     <div class="floating-heart" style="left: 30%; top: 50%;">❤️</div>
     <div class="floating-heart" style="left: 70%; top: 30%;">❤️</div>
     <div class="floating-heart" style="left: 90%; top: 60%;">❤️</div>
-    <div class="floating-heart" style="left: 100%; top: 60%;">❤️</div>
+    <div class="confetti" style="left: 5%; animation-duration: 5s;"></div>
+    <div class="confetti" style="left: 15%; animation-duration: 6s;"></div>
+    <div class="confetti" style="left: 25%; animation-duration: 7s;"></div>
+    <div class="confetti" style="left: 35%; animation-duration: 8s;"></div>
+    <div class="confetti" style="left: 45%; animation-duration: 9s;"></div>
+    <div class="confetti" style="left: 55%; animation-duration: 10s;"></div>
+    <div class="confetti" style="left: 65%; animation-duration: 11s;"></div>
+    <div class="confetti" style="left: 75%; animation-duration: 12s;"></div>
+    <div class="confetti" style="left: 85%; animation-duration: 13s;"></div>
+    <div class="confetti" style="left: 95%; animation-duration: 14s;"></div>
     <audio id="backgroundMusic" loop>
         <source src="Arctic_Monkeys_-_I_Wanna_Be_Yours.mp3" type="audio/mp3">
         Your browser does not support the audio element.
@@ -216,7 +264,7 @@
 
     <button class="start-button" id="startButton">Klik di Sini</button>
     <div class="welcome-text" id="welcomeText"></div>
-    <div class="animated-text">You're very beautiful</div>
+    <div class="animated-text">iya u cantik sih jirla wkwk</div>
     <canvas id="particleCanvas"></canvas>
     <img src="26758.jpg" alt="Photo" class="heart-photo">
 
@@ -242,10 +290,10 @@
 
             const welcomeText = document.getElementById("welcomeText");
             welcomeText.style.display = "block";
-            welcomeText.innerHTML = "wkwk diprank tombol yaa.";
+            welcomeText.innerHTML = "Diprank tombol oakwoakw.";
 
             setTimeout(() => {
-                welcomeText.innerHTML = "puasa kau besok bagi pahalanya:v...";
+                welcomeText.innerHTML = "ni gw ada sesuatu buat lu...";
             }, 2000);
 
             setTimeout(() => {
