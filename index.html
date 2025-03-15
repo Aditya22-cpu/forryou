@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal Love</title>
+    <title>Notfound</title>
     <style>
         body {
             background: linear-gradient(135deg, #0d0d0d, #330033);
+            animation: backgroundAnimation 10s infinite alternate;
+
             text-align: center;
             font-family: 'Arial', sans-serif;
             overflow: hidden;
@@ -27,8 +29,19 @@
             text-shadow: 0 0 30px #ff99cc, 0 0 50px #ff66b2;
             display: none;
             opacity: 0;
-            animation: fadeIn 2s forwards;
-            font-family: 'Cursive', sans-serif; /* Menambahkan gaya font estetik */
+            animation: fadeIn 2s forwards, textAnimation 1.5s infinite alternate, glowAnimation 1.5s infinite alternate;
+        }
+
+        @keyframes textAnimation {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(-10px) scale(1.1); opacity: 0.8; color: #ff99cc; }
+            100% { transform: translateY(-20px) scale(0.9); opacity: 0.5; color: #ff66b2; }
+        }
+
+        @keyframes glowAnimation {
+            0% { text-shadow: 0 0 10px #ff99cc; }
+            50% { text-shadow: 0 0 20px #ff66b2; }
+            100% { text-shadow: 0 0 10px #ff99cc; }
         }
 
         canvas {
@@ -86,41 +99,23 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        @media (max-width: 768px) {
-            .start-button {
-                font-size: 1.5em;
-                padding: 10px 30px;
-            }
-
-            .animated-text {
-                font-size: 2.5em;
-            }
-
-            .welcome-text {
-                font-size: 1.5em;
-            }
-        }
     </style>
 </head>
 <body>
     <audio id="backgroundMusic" loop>
-        <source src="Arctic_Monkeys_-_I_Wanna_Be_Yours.mp3" type="audio/mp3">
+        <source src="music.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
 
     <button class="start-button" id="startButton">Klik di Sini</button>
     <div class="welcome-text" id="welcomeText"></div>
-    <div class="animated-text" id="animatedText">You're very beautiful</div>
+    <div class="animated-text">You're very beautiful</div>
+
     <canvas id="particleCanvas"></canvas>
 
     <script>
         const button = document.getElementById("startButton");
-        const music = document.getElementById("backgroundMusic");
-        const animatedText = document.getElementById("animatedText");
-
         button.addEventListener("mouseover", moveButton);
-        button.addEventListener("touchstart", moveButton); // Menambahkan event touchstart untuk perangkat mobile
         button.addEventListener("click", startAnimation);
 
         function moveButton() {
@@ -132,9 +127,8 @@
 
         function startAnimation() {
             button.style.display = "none";
-            music.play().catch(error => {
-                console.error("Error playing music:", error);
-            });
+            const music = document.getElementById("backgroundMusic");
+            music.play();
 
             const welcomeText = document.getElementById("welcomeText");
             welcomeText.style.display = "block";
@@ -146,10 +140,9 @@
 
             setTimeout(() => {
                 welcomeText.style.display = "none";
-                animatedText.style.display = "block";
+                document.querySelector(".animated-text").style.display = "block";
             }, 5000);
 
-            // Menambahkan delay sebelum partikel mulai muncul
             setTimeout(() => {
                 document.getElementById("particleCanvas").style.display = "block";
                 initParticles();
@@ -161,13 +154,8 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        window.addEventListener("resize", () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
         let particles = [];
-        let state = "forming"; // "forming" untuk membentuk hati, "exploding" untuk menyebar
+        let state = "forming";
 
         function generateHeartPath() {
             let path = [];
@@ -187,44 +175,32 @@
             }
 
             reset() {
-                // Memulai partikel di luar layar dan mengarah ke posisi love
                 let target = heartPath[Math.floor(Math.random() * heartPath.length)];
-                this.x = Math.random() * canvas.width * 2 - canvas.width; // Mulai dari luar layar (kiri/kanan)
-                this.y = Math.random() * canvas.height * 2 - canvas.height; // Mulai dari luar layar (atas/bawah)
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
                 this.targetX = target.x;
                 this.targetY = target.y;
-                this.size = Math.random() * 5 + 3; // Ukuran sedikit lebih besar
-                this.speed = Math.random() * 0.07 + 0.03; // Gerakan lebih cepat
-                this.explodeSpeed = Math.random() * 3 + 1;
+                this.size = Math.random() * 4 + 2;
+                this.speed = Math.random() * 0.05 + 0.02;
+                this.explodeSpeed = Math.random() * 5 + 2;
                 this.angle = Math.random() * Math.PI * 2;
-                this.angleVariation = (Math.random() - 0.5) * Math.PI * 0.5; // Variasi arah gerakan
-                this.distanceFromCenter = Math.random() * 100 + 100; // Jarak acak untuk menyebar
-                this.isExploding = false; // Status untuk meledak atau membentuk hati
+                this.color = "#ff66b2";
             }
 
             update() {
                 if (state === "forming") {
-                    // Gerakan partikel dari samping
-                    if (!this.isExploding) {
-                        this.x += (this.targetX - this.x) * this.speed;
-                        this.y += (this.targetY - this.y) * this.speed;
-                    }
+                    this.x += (this.targetX - this.x) * this.speed;
+                    this.y += (this.targetY - this.y) * this.speed;
                 } else {
-                    // Menyebar secara acak
-                    this.x += Math.cos(this.angle + this.angleVariation) * this.explodeSpeed;
-                    this.y += Math.sin(this.angle + this.angleVariation) * this.explodeSpeed;
-                }
-
-                // Jika terlalu jauh dari hati, reset
-                if (Math.abs(this.x - canvas.width / 2) > this.distanceFromCenter || Math.abs(this.y - canvas.height / 2) > this.distanceFromCenter) {
-                    this.reset();
+                    this.x += Math.cos(this.angle) * this.explodeSpeed;
+                    this.y += Math.sin(this.angle) * this.explodeSpeed;
                 }
             }
 
             draw() {
-                ctx.fillStyle = "#ff66b2";
-                ctx.shadowBlur = 20; // Meningkatkan efek glow
-                ctx.shadowColor = "#ff66b2";
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -232,24 +208,24 @@
         }
 
         function createParticles() {
-            particles = Array.from({ length: 1000 }, () => new Particle()); // Jumlah partikel menjadi 1000
+            particles = Array.from({ length: 1500 }, () => new Particle());
         }
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles); // Menjaga 60 FPS
+            requestAnimationFrame(animateParticles);
         }
 
         function toggleState() {
             state = state === "forming" ? "exploding" : "forming";
-            setTimeout(toggleState, 3500); // Ulang setiap 3.5 detik
+            setTimeout(toggleState, 3500);
         }
 
         function initParticles() {
             createParticles();
             animateParticles();
-            setTimeout(toggleState, 3500); // Ubah status partikel setelah 3.5 detik
+            setTimeout(toggleState, 3500);
         }
     </script>
 </body>
